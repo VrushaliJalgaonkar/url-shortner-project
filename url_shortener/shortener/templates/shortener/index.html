@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>URL Shortener</title>
+    <link href="{% static 'assets/css/styles.css' %}" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>URL Shortener</h2>
+        <form method="POST" action="{% url 'shorten_url' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="long_url" class="form-label">Enter Long URL</label>
+                <input type="url" class="form-control" id="long_url" name="long_url" placeholder="https://example.com" required>
+            </div>
+            <button type="submit" class="btn">Shorten URL</button>
+        </form>
+
+        <!-- Display Shortened URL and Expiration Time After Submission -->
+        {% if short_url %}
+            <div class="result">
+                <p>Shortened URL:</p>
+                <a href="{{ short_url }}" target="_blank" class="link">{{ short_url }}</a>
+            </div>
+            <div class="result">
+                <p>Expires At:</p>
+                <p>{{ expires_at }}</p> <!-- Display the expiration time -->
+            </div>
+        {% endif %}
+        
+        {% if error %}
+            <div class="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>
