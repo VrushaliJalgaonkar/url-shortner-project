@@ -30,7 +30,7 @@ SECRET_KEY = env('SECRET_KEY', default='your-default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['url-shortner-app-8be184488a63.herokuapp.com', 'localhost']
 #env.list('ALLOWED_HOSTS', default=[])
 
 # Application definition
