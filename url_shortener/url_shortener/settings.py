@@ -10,9 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import environ
 from pathlib import Path
 from pymongo import MongoClient
 import os
+
+env = environ.Env()
+environ.Env.read_env() 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--tcg7&g7%ts7ui6386e3rj6rrx-h00kc1fm9$=#vng6v@01wh!'
+SECRET_KEY = env('SECRET_KEY', default='your-default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = []
+DEBUG = env.bool('DEBUG', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 # Application definition
 
@@ -79,15 +82,16 @@ WSGI_APPLICATION = 'url_shortener.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',  # Use Djongo for MongoDB integration
-        'NAME': 'url_shortener_db',  # This is the name of the database in MongoDB Atlas
-        'ENFORCE_SCHEMA': False,  # Disable schema enforcement for MongoDB
-        "CLIENT": {
-            "host": "mongodb+srv://admin:admin@cluster0.i4mx3ca.mongodb.net/url_shortener_db?retryWrites=true&w=majority&appName=Cluster0",
-            "authSource": "admin",  # Optional, if you want to specify the auth source (for MongoDB Atlas)
-            "tls": True,  # Use TLS (recommended for Atlas connection)
+        'NAME': env('DB_NAME', default='url_shortener_db'),
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            "host": env('DB_HOST'),
+            "authSource": "admin",  # Optional
+            "tls": True,  # TLS (recommended for Atlas)
         },
     }
 }
+
 
 
 # MongoDB Connection
@@ -132,9 +136,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# Set STATIC_ROOT for collected static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
