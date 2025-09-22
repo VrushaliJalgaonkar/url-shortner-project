@@ -29,7 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -76,30 +75,25 @@ WSGI_APPLICATION = 'url_shortener.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'url_shortener_db',
-#         'ENFORCE_SCHEMA': False,
-#         "CLIENT": {
-#             "host": "mongodb://127.0.0.1:27017" 
-#         }
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',  # Use Djongo for MongoDB integration
+        'NAME': 'url_shortener_db',  # This is the name of the database in MongoDB Atlas
+        'ENFORCE_SCHEMA': False,  # Disable schema enforcement for MongoDB
+        "CLIENT": {
+            "host": "mongodb+srv://admin:admin@cluster0.i4mx3ca.mongodb.net/url_shortener_db?retryWrites=true&w=majority&appName=Cluster0",
+            "authSource": "admin",  # Optional, if you want to specify the auth source (for MongoDB Atlas)
+            "tls": True,  # Use TLS (recommended for Atlas connection)
+        },
+    }
+}
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / "db.sqlite3",
-#     }
-# }
 
 # MongoDB Connection
-MONGO_URI = "mongodb://localhost:27017/url_shortener_db"  # Update with your actual connection URI
+MONGO_URI = "mongodb+srv://admin:admin@cluster0.i4mx3ca.mongodb.net/url_shortener_db?retryWrites=true&w=majority&appName=Cluster0"
+
 client = MongoClient(MONGO_URI)
-db = client.get_database()
-
-
+db = client["url-shortner-db"]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

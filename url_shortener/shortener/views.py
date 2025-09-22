@@ -3,12 +3,14 @@ from django.utils import timezone
 from django.utils.timezone import make_aware
 from django.http import JsonResponse
 from .database import urls_collection, create_short_url  # Import MongoDB functions
+from django.views.decorators.csrf import csrf_exempt
 
 # Home page rendering
 def home(request):
     return render(request, "shortener/index.html")
 
 # Shorten URL (Handles Form Submission)
+@csrf_exempt
 def shorten_url(request):
     if request.method == "POST":
         long_url = request.POST.get("long_url")
